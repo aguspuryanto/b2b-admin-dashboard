@@ -9,6 +9,7 @@ import { Sidebar } from "./components/Sidebar";
 import { Dashboard } from "./components/Dashboard";
 import { Products } from "./components/Products";
 import { AuditLogs } from "./components/AuditLogs";
+import { POS } from "./components/POS";
 import { Bell } from "lucide-react";
 
 export default function App() {
@@ -103,6 +104,7 @@ export default function App() {
         </div>
 
         {activeTab === "dashboard" && <Dashboard token={token} />}
+        {activeTab === "pos" && <POS token={token} user={user} />}
         {activeTab === "products" && <Products token={token} user={user} />}
         {activeTab === "logs" && user.role === "admin" && <AuditLogs token={token} />}
       </div>

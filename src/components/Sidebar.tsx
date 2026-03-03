@@ -1,5 +1,5 @@
 import React from "react";
-import { LayoutDashboard, Package, Activity, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, Activity, LogOut, ShoppingCart } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export function Sidebar({
@@ -15,6 +15,7 @@ export function Sidebar({
 }) {
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "staff"] },
+    { id: "pos", label: "Point of Sale", icon: ShoppingCart, roles: ["admin", "staff"] },
     { id: "products", label: "Products", icon: Package, roles: ["admin", "staff"] },
     { id: "logs", label: "Audit Logs", icon: Activity, roles: ["admin"] },
   ];

@@ -15,6 +15,7 @@ export function Products({ token, user }: { token: string; user: any }) {
   // Column Config State
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>({
     id: true,
+    barcode: true,
     name: true,
     category: true,
     price: true,
@@ -26,7 +27,7 @@ export function Products({ token, user }: { token: string; user: any }) {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
-  const [formData, setFormData] = useState({ name: "", category: "", price: 0, stock: 0, status: "active" });
+  const [formData, setFormData] = useState({ barcode: "", name: "", category: "", price: 0, stock: 0, status: "active" });
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -117,6 +118,7 @@ export function Products({ token, user }: { token: string; user: any }) {
     if (product) {
       setEditingProduct(product);
       setFormData({
+        barcode: product.barcode || "",
         name: product.name,
         category: product.category,
         price: product.price,
@@ -125,7 +127,7 @@ export function Products({ token, user }: { token: string; user: any }) {
       });
     } else {
       setEditingProduct(null);
-      setFormData({ name: "", category: "", price: 0, stock: 0, status: "active" });
+      setFormData({ barcode: "", name: "", category: "", price: 0, stock: 0, status: "active" });
     }
     setIsModalOpen(true);
   };
@@ -206,7 +208,7 @@ export function Products({ token, user }: { token: string; user: any }) {
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
-                {["id", "name", "category", "price", "stock", "status"].map((col) => (
+                {["id", "barcode", "name", "category", "price", "stock", "status"].map((col) => (
                   visibleColumns[col] && (
                     <th
                       key={col}
@@ -226,16 +228,17 @@ export function Products({ token, user }: { token: string; user: any }) {
             <tbody className="divide-y divide-slate-200">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-500">Loading...</td>
+                  <td colSpan={8} className="py-8 text-center text-slate-500">Loading...</td>
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-500">No products found.</td>
+                  <td colSpan={8} className="py-8 text-center text-slate-500">No products found.</td>
                 </tr>
               ) : (
                 products.map((product) => (
                   <tr key={product.id} className="hover:bg-slate-50">
                     {visibleColumns.id && <td className="px-6 py-4">{product.id}</td>}
+                    {visibleColumns.barcode && <td className="px-6 py-4">{product.barcode || "-"}</td>}
                     {visibleColumns.name && <td className="px-6 py-4 font-medium text-slate-900">{product.name}</td>}
                     {visibleColumns.category && <td className="px-6 py-4">{product.category}</td>}
                     {visibleColumns.price && <td className="px-6 py-4">${product.price.toFixed(2)}</td>}
@@ -312,6 +315,16 @@ export function Products({ token, user }: { token: string; user: any }) {
               {editingProduct ? "Edit Product" : "Add Product"}
             </h2>
             <form onSubmit={handleSave} className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">Barcode</label>
+                <input
+                  type="text"
+                  value={formData.barcode}
+                  onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="Scan or enter barcode"
+                />
+              </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">Name</label>
                 <input

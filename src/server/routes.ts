@@ -5,6 +5,7 @@ import { db } from "./db";
 import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
 import fs from "fs";
+import { broadcastNotification } from "../../server";
 
 const JWT_SECRET = "supersecretkey";
 
@@ -33,6 +34,16 @@ const logAction = (userId: number, action: string, entity: string, entityId: num
   db.prepare("INSERT INTO audit_logs (user_id, action, entity, entity_id, details) VALUES (?, ?, ?, ?, ?)").run(
     userId, action, entity, entityId, details
   );
+  
+  // Broadcast notification to admins
+  broadcastNotification({
+    type: "AUDIT_LOG",
+    message: `User ${userId} performed ${action} on ${entity} ${entityId}`,
+    action,
+    entity,
+    entityId,
+    details
+  }, ["admin"]);
 };
 
 export function setupRoutes(app: Express, upload: any) {

@@ -1,0 +1,5 @@
+{
+  "name": "B2B Admin Dashboard",
+  "description": "Admin Dashboard with RBAC, CRUD, CSV Import/Export, and Audit Logs",
+  "requestFramePermissions": []
+}
